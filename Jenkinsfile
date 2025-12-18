@@ -44,18 +44,18 @@ pipeline {
       }
     }
 
-    stage('Push Docker Image') {
-      steps {
-        // withCredentials([string(credentialsId: 'Vamshi@1234@', variable: 'PASS')]) {
-        //   sh """
-        //     docker login -u parivedavs -p $PASS
-        //     docker push $DOCKER_IMAGE:$DOCKER_TAG
-        //   """
-        // docker.withRegistry("https://registry.hub.docker.com", 'dockerhub-creds') {
-        //   dockerImage.push('${env.BUILD_NUMBER}')
-        // }
-      }
-    }
+    // stage('Push Docker Image') {
+    //   steps {
+    //     // withCredentials([string(credentialsId: 'Vamshi@1234@', variable: 'PASS')]) {
+    //     //   sh """
+    //     //     docker login -u parivedavs -p $PASS
+    //     //     docker push $DOCKER_IMAGE:$DOCKER_TAG
+    //     //   """
+    //     docker.withRegistry("https://registry.hub.docker.com", 'dockerhub-creds') {
+    //       dockerImage.push('${env.BUILD_NUMBER}')
+    //     }
+    //   }
+    // }
 
     // stage('Deploy to Kubernetes') {
     //   steps {

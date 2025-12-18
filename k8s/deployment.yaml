@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: loginpage
+  template:
+    metadata:
+      labels:
+        app: loginpage
+    spec:
+      containers:
+        - name: react-container
+          image: parivedavs/loginpage:latest
+          ports:
+            - containerPort: 80

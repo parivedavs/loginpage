@@ -1,69 +1,51 @@
 pipeline {
-  agent any
-    tools{ nodejs "node" }
-  environment {
-    // DOCKER_IMAGE = "parivedavs/loginpage"
-    // DOCKER_TAG = "latest"
-    imageName = "techwithjio/loginpage"
-    registryCredentials = 'parivedavs'
-    dockerImage = ''
-  }
+    agent any
 
-  stages {
-    // stage('Checkout Code') {
-    //   steps {
-    //     git branch: 'main',
-    //     url: 'https://github.com/parivedavs/loginpage.git'
-    //   }
-    // }
-
-    stage('Install Dependencies') {
-      steps {
-        sh 'npm install'
-      }
+    tools {
+        nodejs "node"
     }
 
-    stage('Tests'){
-        steps {
-            sh 'npm test'
+    environment {
+        IMAGE_NAME = "techwithjio/loginpage"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'npm install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                bat 'npm test -- --watch=false'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
+                        dockerImage.push()
+                        dockerImage.push('latest')
+                    }
+                }
+            }
         }
     }
-
-    // stage('Build React App') {
-    //   steps {
-    //     sh 'npm run build'
-    //   }
-    // }
-
-    stage('Build Docker Image') {
-      steps {
-        // sh 'docker build -t $DOCKER_IMAGE:$DOCKER_TAG .'
-        script {
-          dockerImage = docker.build imageName
-        }
-      }
-    }
-
-    stage('Push Docker Image') {
-      steps {
-        // withCredentials([string(credentialsId: 'Vamshi@1234@', variable: 'PASS')]) {
-        //   sh """
-        //     docker login -u parivedavs -p $PASS
-        //     docker push $DOCKER_IMAGE:$DOCKER_TAG
-        //   """
-        script {
-          docker.withRegistry("https://registry.hub.docker.com", 'dockerhub-creds') {
-            dockerImage.push('${env.BUILD_NUMBER}')
-          }
-        }
-      }
-    }
-
-    // stage('Deploy to Kubernetes') {
-    //   steps {
-    //     sh 'kubectl apply -f k8s/deployment.yaml'
-    //     sh 'kubectl apply -f k8s/service.yaml'
-    //   }
-    // }
-  }
 }

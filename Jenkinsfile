@@ -52,7 +52,7 @@ pipeline {
         //     docker push $DOCKER_IMAGE:$DOCKER_TAG
         //   """
         script {
-          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
+          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
                         dockerImage.push()
                         dockerImage.push('latest')
                     }

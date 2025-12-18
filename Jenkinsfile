@@ -51,8 +51,10 @@ pipeline {
         //     docker login -u parivedavs -p $PASS
         //     docker push $DOCKER_IMAGE:$DOCKER_TAG
         //   """
-        docker.withRegistry("https://registry.hub.docker.com", 'dockerhub-creds') {
-          dockerImage.push('${env.BUILD_NUMBER}')
+        script {
+          docker.withRegistry("https://registry.hub.docker.com", 'dockerhub-creds') {
+            dockerImage.push('${env.BUILD_NUMBER}')
+          }
         }
       }
     }

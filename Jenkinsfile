@@ -4,7 +4,7 @@ pipeline {
   environment {
     // DOCKER_IMAGE = "parivedavs/loginpage"
     // DOCKER_TAG = "latest"
-    imageName = "techwithjio/loginpage"
+    imageName = "parivedavs/login_page"
     registryCredentials = 'parivedavs'
     dockerImage = ''
   }
